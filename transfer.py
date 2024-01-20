@@ -50,20 +50,19 @@ def send_tokens():
     for wall in wallets:
         try:
             # Ensure the address is checksummed
-            print(wall['address'])
             recipient_address = Web3.to_checksum_address(wall['address'])
-            print(f"Sending {wall['amount']} tokens to {recipient_address}")
+            print("Index: ", wallets.index(wall),f"Sending {wall['amount']} tokens to {recipient_address}")
+
             # Convert amount to the smallest unit based on the token's decimals
             amount_in_token_units = float(wall['amount']) * (10 ** decimals)
             amount_in_wei = int(amount_in_token_units)
-            print("user:", wallet.address)
             tx = {
                 'from': str(wallet.address),
                 'gas': 200000,  # Set gas limit; adjust based on your needs
                 # 'gasPrice': w3.toWei('10', 'gwei')  # Optional: Uncomment and adjust if you want to specify gasPrice
             }
             tx = token_contract.functions.transfer(recipient_address, amount_in_wei).build_transaction({
-                'chainId': 97,
+                'chainId': w3.eth.chain_id,
                 'gas': 200000,
                 'gasPrice': w3.to_wei('10', 'gwei'),
                 'nonce': w3.eth.get_transaction_count(wallet.address),
