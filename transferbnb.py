@@ -39,7 +39,7 @@ def send_bnb():
             print("Index: ", wallets.index(wall), f"Sending {wall['amount']} BNB to {recipient_address}")
 
             # Convert amount to Wei
-            amount_in_wei = w3.to_wei(float(0.00005), 'ether')
+            amount_in_wei = w3.to_wei(float(wall['amount']), 'ether')
 
             # Build transaction
             tx = {
@@ -47,7 +47,6 @@ def send_bnb():
                 'to': recipient_address,
                 'value': amount_in_wei,
                 'gas': 21000,
-                # hex of 97 changed to 0x61
                 'gasPrice': w3.to_wei('10' if w3.eth.chain_id == 0x61 else '3', 'gwei'),
                 'nonce': w3.eth.get_transaction_count(wallet.address),
             }
